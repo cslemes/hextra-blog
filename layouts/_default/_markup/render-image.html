@@ -7,6 +7,8 @@
 {{- $startsWithSlash := hasPrefix $dest "/" -}}
 {{- $startsWithRelative := hasPrefix $dest "../" -}}
 
+{{- $isMP4 := strings.HasSuffix $dest ".mp4" -}}
+
 {{- if and $dest $isLocal -}}
   {{- if $startsWithSlash -}}
     {{/* Images under static directory */}}
@@ -17,10 +19,15 @@
   {{- end -}}
 {{- end -}}
 
-{{- with .Title -}}
+{{- if $isMP4 -}}
+  <video controls {{ if $lazyLoading }}loading="lazy"{{ end }}>
+    <source src="{{ $dest | safeURL }}" type="video/mp4">
+    Seu navegador não suporta o elemento de vídeo.
+  </video>
+{{- else if .Title -}}
   <figure>
-    <img src="{{ $dest | safeURL }}" title="{{ . }}" alt="{{ $alt }}" {{ if $lazyLoading }}loading="lazy"{{ end }} />
-    <figcaption>{{ . }}</figcaption>
+    <img src="{{ $dest | safeURL }}" title="{{ .Title }}" alt="{{ $alt }}" {{ if $lazyLoading }}loading="lazy"{{ end }} />
+    <figcaption>{{ .Title }}</figcaption>
   </figure>
 {{- else -}}
   <img src="{{ $dest | safeURL }}" alt="{{ $alt }}" {{ if $lazyLoading }}loading="lazy"{{ end }} />
