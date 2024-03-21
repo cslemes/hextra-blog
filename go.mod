@@ -1,3 +1,3 @@
-module github.com/cslemes/hextra-blog
+module github.com/imfing/hextra
 
-go 1.21.0
+go 1.20
